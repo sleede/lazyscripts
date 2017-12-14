@@ -42,7 +42,7 @@ force_rsa()
 {
   echo -n "Disable root login using password? (only rsa key) (y/n) "
   read -r touche </dev/tty
-  if [[ "$touche" = "o" || "$touche" = "o" ]]
+  if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
     sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
     /etc/init.d/ssh restart
