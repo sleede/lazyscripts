@@ -34,7 +34,7 @@ password()
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
-    passwd
+    passwd </dev/tty
   fi
 }
 
@@ -69,7 +69,7 @@ add_swap()
 
 mount_vol()
 {
-  echo -n "Mount a volume (like /dev/vdx)? (o/n) "
+  echo -n "Mount a volume (like /dev/vdx)? (y/n) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
