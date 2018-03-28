@@ -13,7 +13,7 @@ upgrade()
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
    then
-    apt-get update && sudo apt-get upgrade
+    apt-get update && apt-get upgrade
   fi
 }
 
@@ -61,7 +61,7 @@ add_swap()
     chmod 600 /swapfile
     mkswap /swapfile
     swapon /swapfile
-    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+    echo '/swapfile none swap sw 0 0' | tee -a /etc/fstab
     echo 'vm.swappiness = 10' >> /etc/sysctl.conf
     echo 'vm.vfs_cache_pressure=50' >> /etc/sysctl.conf
   fi
