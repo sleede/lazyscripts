@@ -82,7 +82,7 @@ mount_vol()
       mkdir -p /apps
       mount "/dev/${volume_name}" /apps
       uuid_value=$(blkid -o value -s UUID /dev/${volume_name})
-      echo "UUID=\"${uuid_value}\" /apps ext4 defaults 0 2" >> /etc/fstab
+      echo "UUID=\"${uuid_value}\" /apps ext4 defaults,nofail 0 2" >> /etc/fstab
     fi
   fi
 }
