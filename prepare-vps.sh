@@ -13,7 +13,7 @@ upgrade()
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
    then
-    apt-get update && apt-get upgrade
+    apt-get update && apt-get -y upgrade
   fi
 }
 
@@ -87,8 +87,16 @@ mount_vol()
   fi
 }
 
+function trap_ctrlc()
+{
+  echo "Ctrl^C, exiting..."
+  exit 2
+}
+
+
 vps_prepare()
 {
+  trap "trap_ctrlc" 2 # SIGINT
   upgrade
   timezone
   password
