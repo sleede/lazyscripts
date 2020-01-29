@@ -23,7 +23,7 @@ timezone()
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
-    apt-get install ntp ntpdate
+    apt-get -y install ntp ntpdate tzdata
     dpkg-reconfigure tzdata
   fi
 }
