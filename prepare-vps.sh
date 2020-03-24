@@ -55,6 +55,7 @@ force_rsa()
 
 add_swap()
 {
+  free -h
   echo -n "Add swap? (highly recommended) (y/n) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
