@@ -80,14 +80,15 @@ mount_vol()
   then
     fdisk -l
     read -rp "Specify volume name (eg. vdb): " volume_name </dev/tty
-    read -rp "Do you really want to format and mount the volume /dev/${volume_name} on /apps? (y/n) : " touche </dev/tty
+    read -rp "Specify destination path (eg. /apps): " path_name < /dev/tty
+    read -rp "Do you really want to format and mount the volume /dev/${volume_name} on ${path_name} ? (y/n) : " touche </dev/tty
     if [[ "$touche" = "y" || "$touche" = "o" ]]
     then
       mkfs -t ext4 "/dev/${volume_name}"
-      mkdir -p /apps
-      mount "/dev/${volume_name}" /apps
+      mkdir -p ${path_name}
+      mount "/dev/${volume_name}" ${path_name}
       uuid_value=$(blkid -o value -s UUID /dev/${volume_name})
-      echo "UUID=\"${uuid_value}\" /apps ext4 defaults,nofail 0 2" >> /etc/fstab
+      echo "UUID=\"${uuid_value}\" ${path_name} ext4 defaults,nofail 0 2" >> /etc/fstab
     fi
   fi
 }
