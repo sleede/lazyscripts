@@ -2,6 +2,6 @@
 
 download script sh
 
-chmod a+x prepare-vps.sh
+chmod u+x prepare-vps.sh
 
 ./prepare-vps
