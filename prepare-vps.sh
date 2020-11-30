@@ -93,6 +93,35 @@ mount_vol()
   fi
 }
 
+install_docker()
+{
+  echo -n "Install Docker from docker-ce repository? (y/n)"
+  read -r touche </dev/tty
+  if [[ "$touche" = "y" || "$touche" = "o" ]]
+  then
+    apt install apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    apt update
+    apt-cache policy docker-ce
+    apt install docker-ce
+    systemctl status docker
+  fi
+}
+
+install_docker_compose()
+{
+  echo -n "Install Docker Compose v1.27.4 from docker github repository? (y/n)"
+  read -r touche </dev/tty
+  if [[ "$touche" = "y" || "$touche" = "o" ]]
+  then
+    #read -rp "Specify the desired version (default. 1.27.4): " compose_version </dev/tty
+    curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    chmod +x /usr/local/bin/docker-compose
+    docker-compose --version
+  fi
+}
+
 function trap_ctrlc()
 {
   echo "Ctrl^C, exiting..."
@@ -109,6 +138,8 @@ vps_prepare()
   force_rsa
   add_swap
   mount_vol
+  install_docker
+  install_docker_compose
 }
 
 vps_prepare "$@"
