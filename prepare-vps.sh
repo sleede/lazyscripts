@@ -9,7 +9,7 @@ fi
 
 upgrade()
 {
-  echo -n "Upgrade the system? (y/n) "
+  echo -n "Upgrade the system? (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
    then
@@ -19,7 +19,7 @@ upgrade()
 
 timezone()
 {
-  echo -n "Update timezone? (y/n) "
+  echo -n "Update timezone? (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
@@ -34,7 +34,7 @@ timezone()
 
 password()
 {
-  echo -n "Define / change the root password (usefull for recovery mode)? (y/n) "
+  echo -n "Define / change the root password (usefull for recovery mode)? (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
@@ -44,7 +44,7 @@ password()
 
 force_rsa()
 {
-  echo -n "Disable root login using password? (only rsa key) (y/n) "
+  echo -n "Disable root login using password? (only rsa key) (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
@@ -56,7 +56,7 @@ force_rsa()
 add_swap()
 {
   free -h
-  echo -n "Add swap? (highly recommended) (y/n) "
+  echo -n "Add swap? (highly recommended) (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
@@ -74,7 +74,7 @@ add_swap()
 
 mount_vol()
 {
-  echo -n "Mount a volume (like /dev/vdx)? (y/n) "
+  echo -n "Mount a volume (like /dev/vdx)? (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
@@ -95,29 +95,37 @@ mount_vol()
 
 install_docker()
 {
-  echo -n "Install Docker from docker-ce repository? (y/n)"
+  echo -n "Install Docker from docker-ce repository? (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
-    apt install apt-transport-https ca-certificates curl software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    apt install apt-transport-https ca-certificates curl gnupg lsb-release
+    local os=$(lsb_release -is | tr "[:upper:]" "[:lower:]")
+    curl -fsSL "https://download.docker.com/linux/$os/gpg" | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/$os \
+      $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
     apt update
     apt-cache policy docker-ce
-    apt install docker-ce
+    apt install docker-ce docker-ce-cli containerd.io
     systemctl status docker
   fi
 }
 
 install_docker_compose()
 {
-  echo -n "Install Docker Compose v1.27.4 from docker github repository? (y/n)"
+  echo -n "Install Docker Compose v1.29.2 from docker github repository? (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
-    #read -rp "Specify the desired version (default. 1.27.4): " compose_version </dev/tty
-    curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    #read -rp "Specify the desired version (default. 1.29.2): " compose_version </dev/tty
+    curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
+    # install bash-completion for docker-compose
+    apt install bash-completion
+    curl \
+      -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose \
+      -o /etc/bash_completion.d/docker-compose
     docker-compose --version
   fi
 }
