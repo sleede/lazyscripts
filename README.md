@@ -1,7 +1,5 @@
 # Sleede lazyscripts
 
-download script sh
-
-chmod u+x prepare-vps.sh
-
-./prepare-vps
+```
+curl -sSL prepare-vps.sleede.com | bash
+```
