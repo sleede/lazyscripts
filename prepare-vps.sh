@@ -114,12 +114,12 @@ install_docker()
 
 install_docker_compose()
 {
-  echo -n "Install Docker Compose v1.29.2 from docker github repository? (y/N) "
+  echo -n "Install Docker Compose from docker-ce repository? (y/N) "
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
     apt-get install --yes docker-compose-plugin bash-completion
-    docker compose --version
+    docker compose version
   fi
 }
 
