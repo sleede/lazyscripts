@@ -118,15 +118,8 @@ install_docker_compose()
   read -r touche </dev/tty
   if [[ "$touche" = "y" || "$touche" = "o" ]]
   then
-    #read -rp "Specify the desired version (default. 1.29.2): " compose_version </dev/tty
-    curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-    # install bash-completion for docker-compose
-    apt-get install --yes bash-completion
-    curl \
-      -L https://raw.githubusercontent.com/docker/compose/1.29.2/contrib/completion/bash/docker-compose \
-      -o /etc/bash_completion.d/docker-compose
-    docker-compose --version
+    apt-get install --yes docker-compose-plugin bash-completion
+    docker compose --version
   fi
 }
 
